@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Trò Chơi Sắc Tê Việt Nam</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="game-container">
+        <h1 id="game-title">Trò Chơi Sắc Tê Việt Nam</h1>
+
+        <div id="game-board">
+            
+            <div class="player-slot north" id="player-north">
+                <div class="player-info">
+                    <span class="player-name">Bot Bắc</span>
+                    <div class="player-money" id="money-north">2000 $</div>
+                </div>
+                <div class="played-cards-container" id="played-north"></div>
+                <div class="hand-cards-container horizontal" id="hand-north"></div>
+                <div class="stop-banner">STOP</div>
+            </div>
+
+            <div class="player-slot west" id="player-west">
+                <div class="player-info">
+                    <span class="player-name">Bot Tây</span>
+                    <div class="player-money" id="money-west">2000 $</div>
+                </div>
+                <div class="played-cards-container" id="played-west"></div>
+                <div class="hand-cards-container vertical" id="hand-west"></div>
+                <div class="stop-banner">STOP</div>
+            </div>
+
+            <div id="center-deck">
+                <div class="deck-card-back"></div>
+            </div>
+
+            <div class="player-slot east" id="player-east">
+                <div class="player-info">
+                    <span class="player-name">Bot Đông</span>
+                    <div class="player-money" id="money-east">2000 $</div>
+                </div>
+                <div class="played-cards-container" id="played-east"></div>
+                <div class="hand-cards-container vertical" id="hand-east"></div>
+                <div class="stop-banner">STOP</div>
+            </div>
+
+            <div class="player-slot south" id="player-south">
+                <div class="player-info">
+                    <span class="player-name">Tôi</span>
+                    <div class="player-money" id="money-south">2000 $</div>
+                </div>
+                <div class="played-cards-container" id="played-south"></div>
+                <div class="hand-cards-container horizontal" id="hand-south"></div>
+                <div class="stop-banner">STOP</div>
+            </div>
+
+        </div>
+
+        <div id="control-panel">
+            <div class="button-row">
+                <button id="btn-chia" class="btn">Chia Bài</button>
+                <button id="btn-quay" class="btn" disabled>Quay Lượt Đi</button>
+            </div>
+            <div class="button-row">
+                <button id="btn-danh" class="btn action-btn" disabled>Đánh Bài</button>
+            </div>
+            <div class="button-row">
+                <button id="btn-huongdan" class="btn">Hướng Dẫn</button>
+                <button id="btn-bgm" class="btn">🔇 Nhạc Nền</button>
+            </div>
+        </div>
+
+        <div id="status-announcement" class="toast-overlay"></div>
+
+        <div id="modal-huongdan" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <div id="huongdan-content"></div>
+            </div>
+        </div>
+
+        <div id="modal-victory" class="modal-endgame">
+            <div class="victory-content">
+                <h2 id="victory-text">Chúc Mừng!</h2>
+                <button id="btn-newgame" class="btn-restart">Nhấn Ván Mới Nhé</button>
+            </div>
+        </div>
+
+        <footer id="game-footer">Thiết Kế Trần Cường - Zalo: 0907860662</footer>
+    </div>
+
+    <script src="bobai.js"></script>
+    <script src="huongdan.js"></script>
+    <script src="giamsat.js"></script>
+	<script src="tuanhoan.js"></script>
+	<script src="chiabai.js"></script>
+    <script src="script.js"></script>
+	<script src="botsacte.js"></script>
+</body>
+</html>

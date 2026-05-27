@@ -1,0 +1,545 @@
+/* Reset định dạng chuẩn và chống kéo copy khối văn bản */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+body {
+    background-color: #111;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* Container chính quản lý tỉ lệ màn hình PC và Mobile di động */
+#game-container {
+    width: 100vw;
+    height: 100vh;
+    max-width: 500px;
+    max-height: 850px;
+    background: radial-gradient(circle, #1a5e3a 0%, #0d3820 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    padding: 10px;
+    border: 4px solid #333;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+}
+
+/* Tiêu đề chớp nháy nhẹ */
+#game-title {
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 5px;
+    text-shadow: 0 0 8px rgba(255,255,255,0.6);
+    animation: gentleBlink 2s infinite ease-in-out;
+}
+
+@keyframes gentleBlink {
+    0%, 100% { opacity: 1; text-shadow: 0 0 6px rgba(255,255,255,0.4); }
+    50% { opacity: 0.7; text-shadow: 0 0 12px rgba(255,255,255,0.9); }
+}
+
+/* Khung bàn chơi Casino buộc các phần tử nằm trong giới hạn */
+/* Khung bàn chơi Casino */
+#game-board {
+    width: 100%;
+    flex: 1;
+    margin: 10px 0;
+
+    position: relative;
+    overflow: hidden;
+
+    border-radius: 16px;
+
+    /* Viền trắng nổi 3D */
+    border: 3px solid rgba(255,255,255,0.95);
+
+    background:
+    radial-gradient(circle at center,
+    rgba(255,255,255,0.03) 0%,
+    rgba(0,0,0,0.08) 100%);
+
+    /* Đổ bóng tạo chiều sâu */
+    box-shadow:
+        inset 0 0 12px rgba(255,255,255,0.15),
+        inset 0 0 30px rgba(255,255,255,0.08),
+        0 0 10px rgba(255,255,255,0.25),
+        0 0 25px rgba(255,255,255,0.18);
+
+    /* Chớp nhẹ */
+    animation: boardGlow 2.2s infinite ease-in-out;
+}
+
+/* Lớp viền phụ tạo hiệu ứng 3D */
+#game-board::before {
+    content: "";
+    position: absolute;
+
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+
+    border-radius: 12px;
+
+    border: 2px solid rgba(255,255,255,0.35);
+
+    pointer-events: none;
+
+    box-shadow:
+        inset 0 0 10px rgba(255,255,255,0.12),
+        0 0 12px rgba(255,255,255,0.12);
+}
+
+/* Hiệu ứng sáng nhấp nháy */
+@keyframes boardGlow {
+
+    0% {
+        box-shadow:
+            inset 0 0 12px rgba(255,255,255,0.10),
+            inset 0 0 25px rgba(255,255,255,0.06),
+            0 0 8px rgba(255,255,255,0.18),
+            0 0 18px rgba(255,255,255,0.10);
+    }
+
+    50% {
+        box-shadow:
+            inset 0 0 18px rgba(255,255,255,0.20),
+            inset 0 0 35px rgba(255,255,255,0.10),
+            0 0 18px rgba(255,255,255,0.35),
+            0 0 40px rgba(255,255,255,0.25);
+    }
+
+    100% {
+        box-shadow:
+            inset 0 0 12px rgba(255,255,255,0.10),
+            inset 0 0 25px rgba(255,255,255,0.06),
+            0 0 8px rgba(255,255,255,0.18),
+            0 0 18px rgba(255,255,255,0.10);
+    }
+}
+
+/* Định vị cấu trúc người chơi tổng thể */
+.player-slot {
+    position: absolute;
+    display: flex;
+    transition: all 0.3s ease;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+/* Hiệu ứng chớp viền vàng khi đến lượt chính xác */
+.player-slot.active-turn {
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 15px #ffd700;
+    animation: goldPulse 1s infinite alternate;
+}
+
+@keyframes goldPulse {
+    0% { box-shadow: 0 0 5px #ffd700; }
+    100% { box-shadow: 0 0 20px #ffd700; }
+}
+
+/* Bố cục hướng NAM & BẮC */
+.player-slot.south { 
+    bottom: 5px; left: 50%; transform: translateX(-50%); 
+    width: 90%; flex-direction: column; align-items: center; 
+}
+.player-slot.north { 
+    top: 5px; left: 50%; transform: translateX(-50%); 
+    width: 90%; flex-direction: column; align-items: center; 
+}
+
+/* BOT TÂY */
+.player-slot.west {
+    left: 5px;
+    top: 54%;
+    transform: translateY(-50%);
+    display: grid;
+    grid-template-areas:
+        "info info"
+        "hand played";
+    grid-template-columns: auto auto;
+    gap: 8px;
+    align-items: start;
+}
+
+/* BOT ĐÔNG */
+.player-slot.east {
+    right: 5px;
+    top: 54%;
+    transform: translateY(-50%);
+    display: grid;
+    grid-template-areas:
+        "info info"
+        "played hand";
+    grid-template-columns: auto auto;
+    gap: 8px;
+    align-items: start;
+}
+
+/* Đồng bộ khu vực tên cho Bot Tây và Đông */
+.player-slot.west .player-info,
+.player-slot.east .player-info {
+    grid-area: info;
+    width: 100%;
+    text-align: center;
+}
+
+/* Định danh khu vực đổ bài theo Grid diện tích */
+.player-slot.west .hand-cards-container, 
+.player-slot.east .hand-cards-container { 
+    grid-area: hand; 
+}
+.player-slot.west .played-cards-container, 
+.player-slot.east .played-cards-container { 
+    grid-area: played; 
+}
+
+
+
+/* Thông tin chữ hiển thị người chơi */
+.player-info {
+    text-align: center;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    z-index: 5;
+    background: rgba(0,0,0,0.4);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+.player-money {
+    color: #66ff66;
+    font-size: 12px;
+}
+
+/* Vùng chứa bài gốc tổng quát */
+.hand-cards-container, .played-cards-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Cấu hình hướng bài xếp theo trục Ngang cho Nam/Bắc */
+.hand-cards-container.horizontal { flex-direction: row; gap: 4px; margin-top: 4px; min-height: 65px; }
+.played-cards-container { gap: 3px; min-height: 50px; margin-top: 2px; }
+
+/* Ép khay bài của Bot Tây & Đông xếp theo hàng dọc song song */
+.player-slot.west .hand-cards-container,
+.player-slot.west .played-cards-container,
+.player-slot.east .hand-cards-container,
+.player-slot.east .played-cards-container {
+    flex-direction: column;
+    gap: 0;
+    margin-top: 4px;
+    min-width: 40px;
+    justify-content: flex-start;
+}
+
+/* Khoảng cách xếp chồng dọc mượt mà của bài Bot Đông/Tây */
+.player-slot.west .card-base,
+.player-slot.east .card-base {
+    margin-bottom: -26px; 
+}
+.player-slot.west .card-base:last-child,
+.player-slot.east .card-base:last-child {
+    margin-bottom: 0;
+}
+
+/* Tâm bộ bài giữa bàn */
+#center-deck {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 58px;
+    z-index: 2;
+
+    background-image: url('matup.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    border: 2px solid #ffffff;
+    border-radius: 4px;
+}
+
+/* Cấu trúc kích thước lá bài chuẩn thu nhỏ */
+.card-base {
+    width: 40px;
+    height: 58px;
+    background-image: url('matmo.png'); /* ĐÃ SỬA: Sử dụng ảnh matmo.png làm nền bài mở */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    position: relative;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease, border 0.2s ease;
+    cursor: pointer;
+}
+
+/* Ký hiệu nước bài góc trái trên tăng kích thước tối đa */
+.card-suit-top {
+    position: absolute;
+    top: -3px;
+    left: 1px;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+/* Số góc phải dưới tăng kích thước lớn kịch khung cực nét */
+.card-value-main {
+    position: absolute;
+
+    bottom: 2px;
+    right: 3px;
+
+    font-size: 30px;
+
+    font-weight: 900;
+
+    text-shadow:
+        0 1px 0 #fff,
+        0 2px 0 #ddd,
+        0 3px 3px rgba(0,0,0,0.35);
+
+    transform: scale(1.08);
+}
+
+/* Màu sắc đại diện cho các nước bài */
+.text-red { color: #e51c23; }
+.text-black { color: #212121; }
+
+/* CSS mô phỏng mặt bài úp */
+.card-back, .deck-card-back {
+    background-image: url('matup.png') !important; /* ĐÃ SỬA: Sử dụng ảnh matup.png làm nền bài úp */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 2px solid #ffffff;
+}
+
+/* Ẩn hoàn toàn chữ số và ký hiệu nước bài khi lá bài đang úp để lộ ảnh nền */
+.card-back .card-suit-top,
+.card-back .card-value-main,
+.deck-card-back .card-suit-top,
+.deck-card-back .card-value-main {
+    display: none !important;
+}
+
+/* Hiệu ứng viền trắng bao quanh khi người chơi chọn bài */
+.card-base.selected-card {
+    outline: 3px solid #ffffff;
+    box-shadow: 0 0 10px #ffffff;
+    transform: translateY(-8px);
+}
+
+/* Gạch chéo đỏ thông báo bài bị loại ở vòng 5, 6 */
+.card-base.eliminated-cross::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to top right, transparent 46%, #ff0000 46%, #ff0000 54%, transparent 54%),
+                linear-gradient(to top left, transparent 46%, #ff0000 46%, #ff0000 54%, transparent 54%);
+    z-index: 10;
+    border-radius: 4px;
+    opacity: 0.85;
+}
+
+/* Banner STOP xuất hiện đè lên khi bị Chết Tùng */
+.stop-banner {
+    display: none;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    background-color: #ff0000;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 4px 15px;
+    border: 2px solid #fff;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    z-index: 20;
+    letter-spacing: 2px;
+}
+
+.player-slot.dead-tung .stop-banner { display: block; }
+.player-slot.dead-tung { opacity: 0.6; }
+
+/* Bảng điều khiển Button phía dưới */
+#control-panel {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    padding: 5px 0;
+}
+.button-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    width: 100%;
+}
+
+/* CẤU TRÚC HỘP NÚT 3D CHUYÊN NGHIỆP */
+.btn {
+    background: linear-gradient(to bottom, #ffffff, #e0e0e0);
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    /* Đổ khối 3D dày xuống phía dưới */
+    box-shadow: 0 4px 0 #ababab, 0 5px 8px rgba(0,0,0,0.4);
+    transition: all 0.05s ease;
+}
+/* Hiệu ứng lún phím khi ấn chuột xuống */
+.btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #ababab, 0 2px 4px rgba(0,0,0,0.4);
+}
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: 0 4px 0 #ababab, 0 5px 8px rgba(0,0,0,0.1) !important;
+}
+
+/* Thiết kế nút Đánh Bài hộp 3D Vàng đặc trưng nổi bật */
+.action-btn {
+    background: linear-gradient(to bottom, #ffeb3b, #fbc02d);
+    width: 60%;
+    padding: 10px;
+    font-size: 15px;
+    color: #333;
+    box-shadow: 0 5px 0 #f57f17, 0 6px 10px rgba(0,0,0,0.4);
+}
+.action-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 #f57f17, 0 2px 5px rgba(0,0,0,0.4);
+}
+
+/* Nút chơi ván bài mới 3D */
+.btn-restart {
+    background: linear-gradient(to bottom, #ffeb3b, #fbc02d);
+    border: none;
+    padding: 10px 24px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #f57f17, 0 6px 10px rgba(0,0,0,0.4);
+    transition: all 0.05s ease;
+}
+.btn-restart:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 #f57f17, 0 2px 5px rgba(0,0,0,0.4);
+}
+
+/* Toast hiển thị thông báo tiến trình */
+.toast-overlay {
+    display: none;
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #20c997;
+    color: #ffffff;
+    padding: 12px 20px;
+    border-radius: 6px;
+    border: 1px solid #fff;
+    font-weight: bold;
+    text-align: center;
+    z-index: 30;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-size: 14px;
+    width: 80%;
+}
+
+/* Thiết kế khung Modal chung */
+.modal, .modal-endgame {
+    display: none;
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Nội thất Modal hướng dẫn */
+.modal-content {
+    background-color: #17a2b8;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 85%;
+    max-height: 75%;
+    overflow-y: auto;
+    position: relative;
+    border: 2px solid #fff;
+}
+.close-modal {
+    position: absolute;
+    top: 5px; right: 10px;
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Modal thông báo chiến thắng */
+.victory-content {
+    background-color: #d32f2f;
+    border: 3px solid #ffd700;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    width: 85%;
+    box-shadow: 0 0 20px #ffd700;
+}
+#victory-text {
+    color: #ffd700;
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 5px rgba(255,215,0,0.5);
+    animation: gentleBlink 1.5s infinite;
+}
+
+/* Footer chữ vàng nhỏ */
+#game-footer {
+    color: #ffd700;
+    font-size: 11px;
+    text-align: center;
+    margin-bottom: 1px;
+}
+
+/* Hiệu ứng chuyển động chia bài bay từ tâm */
+.dealing-animation {
+    position: absolute;
+    z-index: 50;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
