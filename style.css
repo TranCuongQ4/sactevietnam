@@ -9,6 +9,10 @@
     -ms-user-select: none;
 }
 
+html{
+    overflow-y:auto;
+}
+
 body {
     background-color: #111;
     font-family: 'Arial', sans-serif;
@@ -19,7 +23,7 @@ body {
 
     min-height: 100dvh;
 
-    overflow-y: auto;
+    overflow-y: scroll;
     overflow-x: hidden;
 
     padding: 0;
@@ -69,11 +73,15 @@ body {
 /* Khung bàn chơi Casino */
 #game-board {
     width: 100%;
-    flex: 1;
+
+    min-height: 900px;
+
     margin: 10px 0;
 
     position: relative;
-    overflow: hidden;
+
+    overflow: visible;
+
 
     border-radius: 16px;
 
