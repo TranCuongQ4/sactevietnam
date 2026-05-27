@@ -478,18 +478,36 @@ document.addEventListener("DOMContentLoaded", function() {
         let nguoiThangVongId = winPlay ? winPlay.playerId : starterOfRound;
         
         if (currentRound <= 4) {
-            roundWinners.push(nguoiThangVongId);
-            starterOfRound = nguoiThangVongId; 
 
-            let thongBaoText = `${dichTen(nguoiThangVongId)} Được Quyền Đánh Trước Bài Nhé`;
-            showToast(thongBaoText, 2000);
+    roundWinners.push(nguoiThangVongId);
 
-            currentRound++;
-            setTimeout(batDauVongChoiMoi, 2000);
-        } 
-        else if (currentRound === 5) {
+    starterOfRound = nguoiThangVongId;
+
+    currentRound++;
+
+    let thongBaoText = "";
+
+    // Chỉ riêng từ vòng 4 sang vòng 5
+    if (currentRound === 5) {
+
+        thongBaoText =
+        `${dichTen(nguoiThangVongId)} Hãy Trưng Bài Lên Để Giành Phần Thắng Nhé`;
+
+    } else {
+
+        thongBaoText =
+        `${dichTen(nguoiThangVongId)} Được Quyền Đánh Trước Bài Nhé`;
+
+    }
+
+    showToast(thongBaoText, 2000);
+
+    setTimeout(batDauVongChoiMoi, 2000);
+
+}
+else if (currentRound === 5) {
             starterOfRound = nguoiThangVongId;
-            let thongBaoText = `Vòng Cuối ${dichTen(nguoiThangVongId)} Mở Lá Cuối Để Kết Thúc Nha`;
+            let thongBaoText = `Vòng Cuối ${dichTen(nguoiThangVongId)} Mở Lá Bài Để Kết Thúc Nha`;
             showToast(thongBaoText, 2000);
             
             currentRound = 6; 

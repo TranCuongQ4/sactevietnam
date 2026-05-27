@@ -132,7 +132,7 @@ const TuanHoanVongSauModule = (function() {
         if (nguoiHienTaiId === 'south') {
             console.log("[TuanHoan] Mời bạn bấm chọn bài và đánh quân bài cuối cùng.");
             if (typeof thamChieuShowToast === "function") {
-                thamChieuShowToast("Đến lượt bạn hạ lá bài vòng 6 quyết định!", 3000);
+                thamChieuShowToast("Đến Lượt Bạn Hạ Lá Bài Vòng 6 Quyết Định!", 3000);
             }
 
             const btnDanh = document.getElementById("btn-danh");
@@ -220,7 +220,7 @@ const TuanHoanVongSauModule = (function() {
         });
 
         if (typeof thamChieuShowToast === "function") {
-            thamChieuShowToast(`Ván Bài Kết Thúc! ${tenNguoiThang} Giành Chiến Thắng Chung Cuộc!`, 5000);
+            thamChieuShowToast(`Ván Bài Kết Thúc! ${tenNguoiThang} Giành Chiến Thắng Chung Cuộc!`, 10000);
         }
 
         // Gọi hàm kết thúc bàn giao tài chính cộng tiền thưởng của script.js
