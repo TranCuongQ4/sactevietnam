@@ -32,7 +32,7 @@ body {
 /* Container chính quản lý tỉ lệ màn hình PC và Mobile di động */
 #game-container {
     width: 100%;
-    max-width: 500px;
+    max-width: 600px;
 
     height: 100dvh;
 
